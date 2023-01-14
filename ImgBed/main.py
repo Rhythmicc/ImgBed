@@ -67,23 +67,22 @@ def markdown(filepath: str):
     ct, imgs = parseMarkdownImages(filepath)
     table = qs_default_table(["本地文件", "链接"], title="映射表\n")
     progress, task_id = NormalProgressBar("上传并替换图片", len(imgs))
-    progress.start()
-    progress.start_task(task_id)
-    for img in imgs:
-        if img.startswith("http://") or img.startswith("https://"):
-            progress.advance(task_id, 1)
-            QproDefaultConsole.print(QproWarnString, img, "不是本地文件")
-            continue
-        _raw = img
-        img = formatAbsPath(img, rt_path, user_root)
-        if img not in uploaded:
-            url = apiUploadOneImage(img)
-            table.add_row(f"[bold magenta]{img}[/]", f"[bold cyan]{url}[/]")
-            uploaded[img] = url
+    with progress:
+        progress.start_task(task_id)
+        for img in imgs:
+            if img.startswith("http://") or img.startswith("https://"):
+                progress.advance(task_id, 1)
+                QproDefaultConsole.print(QproWarnString, img, "不是本地文件")
+                continue
+            _raw = img
+            img = formatAbsPath(img, rt_path, user_root)
+            if img not in uploaded:
+                url = apiUploadOneImage(img)
+                table.add_row(f"[bold magenta]{img}[/]", f"[bold cyan]{url}[/]")
+                uploaded[img] = url
 
-        ct = ct.replace(_raw, uploaded[img])
-        progress.advance(task_id, 1)
-    progress.stop()
+            ct = ct.replace(_raw, uploaded[img])
+            progress.advance(task_id, 1)
     with open(filepath, "w") as f:
         f.write(ct)
     QproDefaultConsole.print(table, justify="center")
