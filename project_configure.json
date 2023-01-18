@@ -1,16 +1,16 @@
 {
- "build": "",
- "entry_point": "ImgBed/main.py",
- "executable": "python3 -m ImgBed.main",
- "input_file": "",
- "template_root": "",
- "server_targets": [
-  {
-   "user": "",
-   "host": "",
-   "port": 22,
-   "path": ""
-  }
- ],
- "enable_complete": true
+  "build": "",
+  "entry_point": "ImgBed/main.py",
+  "executable": "python3 -m ImgBed.main",
+  "input_file": "",
+  "template_root": "",
+  "server_targets": [
+    {
+      "user": "lianhaocheng",
+      "host": "localhost",
+      "port": 22,
+      "path": "/opt/homebrew/lib/python3.10/site-packages/"
+    }
+  ],
+  "enable_complete": true
 }

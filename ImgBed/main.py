@@ -96,6 +96,7 @@ def add(files: list):
     :param files: 图片文件路径列表
     """
     table = qs_default_table(["本地文件", "链接"], title="映射表")
+    url = None
     for file in files:
         if not os.path.isfile(file):
             continue
