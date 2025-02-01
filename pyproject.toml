@@ -1,0 +1,14 @@
+[tool.qpro]
+[[tool.qpro.server_targets]]
+user = "lianhaocheng"
+host = "localhost"
+port = 22
+path = "/opt/homebrew/lib/python3.10/site-packages/"
+
+[tool.qpro.config]
+build = ""
+entry_point = "ImgBed/main.py"
+executable = "python3 -m ImgBed.main"
+input_file = ""
+template_root = ""
+enable_complete = true

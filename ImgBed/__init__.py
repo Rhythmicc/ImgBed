@@ -9,7 +9,7 @@ if enable_config:
     config = ImgBedConfig()
 
 import sys
-from QuickProject import user_pip, _ask, external_exec
+from QuickProject import user_pip, _ask, external_exec, QproDefaultStatus
 
 
 def requirePackage(
@@ -31,29 +31,27 @@ def requirePackage(
     :param not_exit: 安装后不退出
     :return: 库或模块的地址
     """
+    local_scope = {}
     try:
-        exec(f"from {pname} import {module}" if module else f"import {pname}")
+        exec((f"from {pname} import {module}" if module else f"import {pname}"), globals(), local_scope)
     except (ModuleNotFoundError, ImportError):
         if not_ask:
             return None
         if _ask(
             {
                 "type": "confirm",
-                "name": "install",
                 "message": f"""{name} require {pname + (' -> ' + module if module else '')}, confirm to install?
   {name} 依赖 {pname + (' -> ' + module if module else '')}, 是否确认安装?""",
                 "default": True,
             }
         ):
-            with QproDefaultConsole.status(
-                "Installing..." if user_lang != "zh" else "正在安装..."
-            ):
+            with QproDefaultStatus("Installing..." if user_lang != "zh" else "正在安装..."):
                 external_exec(
                     f"{set_pip} install {pname if not real_name else real_name} -U",
                     True,
                 )
             if not_exit:
-                exec(f"from {pname} import {module}" if module else f"import {pname}")
+                exec((f"from {pname} import {module}" if module else f"import {pname}"), globals(), local_scope)
             else:
                 QproDefaultConsole.print(
                     QproInfoString,
@@ -65,4 +63,4 @@ def requirePackage(
         else:
             exit(-1)
     finally:
-        return eval(f"{module if module else pname}")
+        return local_scope.get(module if module else pname)
